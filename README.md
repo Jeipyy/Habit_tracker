@@ -1,4 +1,8 @@
 # Habit Tracker
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-000000?style=for-the-badge&logo=sqlite&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
 A backend development project focused on practicing relational database management and system architecture. This repository serves as a practical laboratory to consolidate core concepts of Informatics Engineering through active learning and project-based development.
 
