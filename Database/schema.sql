@@ -11,7 +11,7 @@ CREATE TABLE habits (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
     description TEXT,
-    goal_quantity INTEGER DEFAULT 1, -- Many times
+    goal_quantity INTEGER DEFAULT 1, -- Cuántas veces
     frequency_period VARCHAR(50) DEFAULT 'daily', -- 'daily', 'weekly', 'monthly'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
