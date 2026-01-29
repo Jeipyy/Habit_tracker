@@ -27,5 +27,5 @@ The database is structured to handle various aspects of habit tracking and user 
 ## Setup and Installation
 1. Clone the repository to your local machine.
 2. Navigate to the /database directory.
-3. Run tables.sql to initialize the schema structure.
-4. (Optional) Run test.sql to populate the database with sample data for verification.
+3. Run schema.sql to initialize the schema structure.
+4. (Optional) Run test_data.sql to populate the database with sample data for verification.
