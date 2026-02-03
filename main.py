@@ -77,7 +77,7 @@ def add_habit_log():
     """Asks user for input and saves it to DB."""
     print("\n--- Log New Habit ---")
 
-    show_habits() #show habits before 
+    show_habits() # I show habits before asking for ID
 
     habit_id = get_valid_id("Enter Habit ID to complete (e.g., 1): ")
     
@@ -100,6 +100,7 @@ def add_habit_log():
     except Exception as e:
         print(f" Error saving data: {e}")
 
+# I show all habits using a for loop and cursor.fetchall 
 def show_habits():
     """Fetches and displays all habits."""
 

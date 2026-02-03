@@ -1,0 +1,94 @@
+/* 1. TOTAL FLUIDITY */
+html {
+    scroll-behavior: smooth; /* Smooth scrolling when navigating */
+}
+
+/* Entry animation when loading the page */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body {
+    background-color: #0d1117; /* GitHub Dark */
+    color: #c9d1d9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    animation: fadeIn 0.6s ease-out; /* I apply the animation */
+}
+
+/* SIDEBAR */
+.sidebar {
+    background-color: #161b22;
+    border-right: 1px solid #30363d;
+    min-height: 100vh;
+}
+
+.nav-link { color: #8b949e; transition: all 0.3s ease; }
+.nav-link:hover { color: #ffffff; background-color: #21262d; border-radius: 6px; }
+.nav-link.active { color: #ffffff; background-color: #238636; border-radius: 6px; }
+
+/* CARDS */
+.card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px; /* More rounded */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px); /* I lift the card a bit on mouse hover */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.form-control {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}
+.form-control:focus {
+    background-color: #0d1117;
+    color: #fff;
+    border-color: #8957e5;
+    box-shadow: 0 0 0 0.25rem rgba(137, 87, 229, 0.25);
+}
+
+/* FLUID BUTTONS */
+.btn {
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+}
+
+.btn-purple {
+    background-color: #8957e5;
+    color: white;
+    border: none;
+}
+.btn-purple:hover {
+    background-color: #9e6ceb;
+    box-shadow: 0 4px 12px rgba(137, 87, 229, 0.4);
+}
+
+.btn-check-custom {
+    color: #2ea043;
+    border: 1px solid #30363d;
+    background-color: transparent;
+}
+.btn-check-custom:hover {
+    background-color: #2ea043;
+    color: white;
+    border-color: #2ea043;
+}
+
+.btn-trash-custom {
+    color: #da3633;
+    border: 1px solid #30363d;
+    background-color: transparent;
+}
+.btn-trash-custom:hover {
+    background-color: #da3633;
+    color: white;
+    border-color: #da3633;
+}
+
+hr { border-color: #30363d; }
