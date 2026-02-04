@@ -1,96 +1,100 @@
+import os
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-def get_connection():
-    return psycopg2.connect(
-        host="localhost",
-        database="habit_tracker",
-        user="postgres",
-        password="admin88"
-    )
+# --- 1. DATABASE CONNECTION CONFIGURATION ---
+def get_db_connection():
+    # Attempt to get the secret URL from the Cloud Environment (Render)
+    database_url = os.environ.get('DATABASE_URL')
+    
+    # Fallback: If running locally (no Env Var found), use my direct Neon link
+    if database_url is None:
+        database_url = "postgresql://neondb_owner:npg_JT6WL2nZIGdM@ep-little-haze-aiiwm676-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require"
+    
+    conn = psycopg2.connect(database_url)
+    return conn
 
 @app.route('/')
 def home():
-    conn = get_connection()
-    cursor = conn.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     
-    # SQL PRO: I fetch ID, Name, Description AND the completion count (total_done)
-    query = """
-        SELECT h.id, h.name, h.description, COUNT(l.id) as total_done
-        FROM habits h
-        LEFT JOIN logs l ON h.id = l.habit_id
-        GROUP BY h.id, h.name, h.description
-        ORDER BY h.id ASC;
-    """
+    # I fetch all habits ordering them by ID so they don't jump around
+    cur.execute('SELECT id, name, streak, completed_today FROM habits ORDER BY id ASC;')
+    habits = cur.fetchall()
     
-    cursor.execute(query)
-    my_habits = cursor.fetchall()
-    
-    cursor.close()
+    cur.close()
     conn.close()
     
-    # Now 'habit[3]' will hold the number of times completed (0, 1, 5, etc.)
-    return render_template('index.html', habits=my_habits)
-
-# CHANGE 2: New Route to handle the button click
-@app.route('/complete', methods=['POST'])
-def complete_habit():
-    # request.form is like 'input()' but for web
-    habit_id = request.form.get('habit_id') 
-    
-    conn = get_connection()
-    cursor = conn.cursor()
-    
-    # I insert into history (logs)
-    cursor.execute("INSERT INTO logs (habit_id, is_completed) VALUES (%s, %s);", (habit_id, True))
-    conn.commit()
-    
-    cursor.close()
-    conn.close()
-    
-    # When finished, I reload the main page (home)
-    return redirect(url_for('home'))
+    # Render the main HTML page passing the list of habits
+    return render_template('index.html', habits=habits)
 
 @app.route('/add', methods=['POST'])
 def add_habit():
-    # 1. I receive the text from the input
+    # 1. Capture the text input from the form
     habit_name = request.form.get('habit_name')
     
-    # 2. I connect and Save (Default description='...' and daily)
-    conn = get_connection()
-    cursor = conn.cursor()
+    if habit_name:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # 2. Insert the new habit (Streak starts at 0 by default in SQL)
+        cur.execute("INSERT INTO habits (name) VALUES (%s)", (habit_name,))
+        
+        conn.commit()
+        cur.close()
+        conn.close()
+        
+    # 3. Refresh the page to show the new habit
+    return redirect(url_for('home'))
+
+@app.route('/complete', methods=['POST'])
+def complete_habit():
+    habit_id = request.form.get('habit_id')
     
-    cursor.execute("""
-        INSERT INTO habits (user_id, name, description, goal_quantity, frequency_period)
-        VALUES (1, %s, 'Creado desde la Web', 1, 'daily');
-    """, (habit_name,))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    
+    # Level up streak (+1) and mark 'completed_today' as True
+    cur.execute("UPDATE habits SET streak = streak + 1, completed_today = TRUE WHERE id = %s", (habit_id,))
     
     conn.commit()
-    cursor.close()
+    cur.close()
     conn.close()
-    
-    # 3. I reload the page
     return redirect(url_for('home'))
 
 @app.route('/delete', methods=['POST'])
 def delete_habit():
     habit_id = request.form.get('habit_id')
     
-    conn = get_connection()
-    cursor = conn.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     
-    # I delete logs (history) first to avoid Foreign Key errors
-    cursor.execute("DELETE FROM logs WHERE habit_id = %s;", (habit_id,))
-    # Then I delete the habit
-    cursor.execute("DELETE FROM habits WHERE id = %s;", (habit_id,))
+    # Remove the row from the database permanently
+    cur.execute('DELETE FROM habits WHERE id = %s', (habit_id,))
     
     conn.commit()
-    cursor.close()
+    cur.close()
     conn.close()
+    return redirect(url_for('home'))
+
+@app.route('/reset', methods=['POST'])
+def reset_day():
+    # DEBUG TOOL: A hidden button to reset the day (sets all 'completed_today' to False)
+    conn = get_db_connection()
+    cur = conn.cursor()
     
-    return redirect(url_for('home'))    
+    cur.execute("UPDATE habits SET completed_today = FALSE")
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Cloud Config: Get the PORT from the environment, default to 5000 if local
+    port = int(os.environ.get("PORT", 5000))
+    # '0.0.0.0' is required for the server to be accessible externally
+    app.run(host='0.0.0.0', port=port, debug=True)
