@@ -1,31 +1,47 @@
-# Habit Tracker
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+# Habital - Personal Habit Tracker Web App
+
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![SQL](https://img.shields.io/badge/SQL-000000?style=for-the-badge&logo=sqlite&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
 
-A backend development project focused on practicing relational database management and system architecture. This repository serves as a practical laboratory to consolidate core concepts of Informatics Engineering through active learning and project-based development.
+**Habital** has evolved! What started as a database practice project is now a fully functional **SaaS (Software as a Service) Application**. It allows users to create accounts, log in securely, and track their daily habits with a persistent cloud database.
 
-## Project Objectives
-The primary goal of this system is to bridge the gap between theoretical database concepts and practical implementation. Key areas of focus include:
-* Relational data modeling using PostgreSQL.
-* Implementation of data integrity through foreign keys and cascading actions.
-* Version control and documentation best practices.
+## New Features (v2.0)
+
+* **Secure Authentication:** Complete Login/Register system using `Flask-Login` and Password Hashing.
+* **Cloud Database:** Migrated from local SQL to **Neon Tech (PostgreSQL)** in the cloud.
+* **Modern UI:** A responsive dark-mode interface built with **Bootstrap 5** and **Pico.css**.
+* **Security Best Practices:** Environment variables (`.env`) for sensitive credentials.
 
 ## Technical Stack
-* Database: PostgreSQL
-* Language: SQL (DDL and DML)
-* Management: Git / GitHub
 
-## System Architecture
-The database is structured to handle various aspects of habit tracking and user data management:
-1. Users: Management of unique user profiles and authentication data.
-2. Habits: Definition of user-specific goals with configurable tracking frequencies (daily, weekly, monthly).
-3. Logs: Historical records of habit execution.
-4. Notes: A dedicated space for progress documentation and technical reflections.
+* **Backend:** Python, Flask, Gunicorn.
+* **Database:** PostgreSQL (Production), Psycopg2.
+* **Frontend:** HTML5, CSS3, Jinja2 Templates.
+* **Hosting:** Render (App) + Neon (DB).
 
-## Setup and Installation
-1. Clone the repository to your local machine.
-2. Navigate to the /database directory.
-3. Run schema.sql to initialize the schema structure.
-4. (Optional) Run test_data.sql to populate the database with sample data for verification.
+## How to Run Locally
+
+1.  **Clone the repository**
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  **Configure Environment:**
+    Create a `.env` file with your credentials:
+    ```ini
+    DATABASE_URL=your_neon_url_here
+    SECRET_KEY=your_secret_key
+    ```
+4.  **Initialize Database:**
+    ```bash
+    python init_db.py
+    ```
+5.  **Run:**
+    ```bash
+    python app.py
+    ```
+
+---
+*Built by Jeipyy as part of a Project-Based Learning journey.*

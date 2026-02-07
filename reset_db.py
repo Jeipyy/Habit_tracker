@@ -7,7 +7,7 @@ load_dotenv()
 def reset_database():
     url = os.environ.get("DATABASE_URL")
     if not url:
-        print("❌ Error: No DATABASE_URL found.")
+        print(" Error: No DATABASE_URL found.")
         return
 
     try:
@@ -15,11 +15,11 @@ def reset_database():
         cur = conn.cursor()
 
         print("Deleting old tables (Cleaning up)...")
-        # El CASCADE es importante: borra 'users' y todo lo que dependa de él (como habits)
+        # The CASCADE It's important: Delete 'users' and everything that depends on it (like habits)
         cur.execute("DROP TABLE IF EXISTS habits CASCADE;")
         cur.execute("DROP TABLE IF EXISTS users CASCADE;")
         
-        print("🔨 Creating new 'users' table...")
+        print(" Creating new 'users' table...")
         cur.execute("""
             CREATE TABLE users (
                 id SERIAL PRIMARY KEY,
@@ -30,7 +30,7 @@ def reset_database():
             );
         """)
 
-        print("🔨 Creating new 'habits' table...")
+        print(" Creating new 'habits' table...")
         cur.execute("""
             CREATE TABLE habits (
                 id SERIAL PRIMARY KEY,
